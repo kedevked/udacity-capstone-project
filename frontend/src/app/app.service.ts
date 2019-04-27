@@ -19,7 +19,13 @@ export class AppService {
 }
 
 export interface Prediction {
-  dog: string;
-  human: string;
-  error: string;
+  type: Type;
+  breed?: string;
+  error?: string;
+}
+
+export enum Type {
+  HUMAN = 'human',
+  DOG = 'dog',
+  OTHER = 'other'
 }

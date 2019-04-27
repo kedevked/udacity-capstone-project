@@ -9,13 +9,19 @@
             <!-- <input *ngIf="!imageSrc; else predict" id="fileUpload" type="file" class="hidden-input" (change)="onChange($event)" #fileInput/> -->
             <input type="file" id="input-file" name="file" style="display: none" (change)="onChange($event)" #fileInput>
             <!-- <input type="file" id="input-file" name="file" style="display: none" #fileInput> -->
-            <button *ngIf="!imageSrc; else predict" mat-raised-button color="primary" (click)="fileInput.click()">
+            <button *ngIf="!imageSrc; else predictBlock" mat-raised-button color="primary" (click)="fileInput.click()">
                 Choose file </button>
 
-            <ng-template #predict>
-                <img [src]="imageSrc" class="predict-photo">
+            <ng-template #predictBlock>
+                <img [src]="imageSrc" class="predict-photo" />
                 <button mat-raised-button color="primary" class="predict-button" (click)="predict()"> Predict
                     breed</button>
+                <div>
+                    <div *ngIf="prediction?.breed">Breed: {{prediction.breed}}</div>
+                    <div *ngIf="prediction?.error">
+                        The image uploaded seems not to contains either a human nor a dog</div>
+                </div>
+
             </ng-template>
         </div>
 
@@ -23,12 +29,12 @@
 </div>
 
 <footer>
-        <mat-toolbar>
-          <div class="footer-content">
+    <mat-toolbar>
+        <div class="footer-content">
             Udacity ML Nanodegree Capstone Project (CP) - built with ♥
-          </div>
-        </mat-toolbar>
-      </footer>
-      
+        </div>
+    </mat-toolbar>
+</footer>
+
 
 <router-outlet></router-outlet>

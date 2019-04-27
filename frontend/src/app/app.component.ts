@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AppService } from './app.service';
+import { AppService, Prediction } from './app.service';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +10,7 @@ export class AppComponent {
   title = 'frontend';
   file: any;
   imageSrc: string;
+  prediction: Prediction;
   constructor(private appService: AppService) {}
 
   onChange(event) {
@@ -20,7 +21,9 @@ export class AppComponent {
   }
 
   predict() {
-    this.appService.predict(this.file).subscribe(data => {});
+    this.appService.predict(this.file).subscribe(data => {
+      this.prediction = data;
+    });
   }
 
 }
