@@ -1,0 +1,36 @@
+.mat-card {
+    
+    height: 66%;
+    width: 50%;
+    text-align: center;
+}
+
+.main-content {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center {
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+}
+
+.hidden-input {
+    display:none;
+}
+
+.predict-photo {
+    width: 100%;
+}
+
+.predict-button {
+    margin-top: 0.5cm
+}
+
+
+/**/
+

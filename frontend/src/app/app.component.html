@@ -1,4 +1,18 @@
-<input id="fileUpload" type="file" (change)="onChange($event)" />
-<button (click)="predict()">predict</button>
+<div class="main-content">
+    <mat-card class="main-card">
+        <div class="center">
+            <!-- <input *ngIf="!imageSrc; else predict" id="fileUpload" type="file" class="hidden-input" (change)="onChange($event)" #fileInput/> -->
+            <input type="file" id="input-file" name="file" style="display: none" (change)="onChange($event)" #fileInput>
+            <!-- <input type="file" id="input-file" name="file" style="display: none" #fileInput> -->
+            <button *ngIf="!imageSrc; else predict" mat-raised-button color="primary" (click)="fileInput.click()"> Choose file </button>
+
+            <ng-template #predict>
+                    <img [src]="imageSrc" class="predict-photo">
+                    <button  mat-raised-button color="primary" class="predict-button" (click)="predict()"> Predict breed</button>
+            </ng-template>
+        </div>
+            
+    </mat-card>
+</div>
 
 <router-outlet></router-outlet>
