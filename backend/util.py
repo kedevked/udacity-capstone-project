@@ -13,7 +13,6 @@ from keras import backend as K
 #ResNet50_model = ResNet50(weights='imagenet')
 face_cascade = cv2.CascadeClassifier('face_detector/haarcascade_frontalface_alt.xml')
 
-
 def path_to_tensor(img_path):
     #try:
     # loads RGB image as PIL.Image.Image type
@@ -77,7 +76,7 @@ def predict_breed(img_path):
 
 def VGG19_predict_breed(img_path):
     # extract bottleneck features
-    K.clear_session()
+    # K.clear_session()
     VGG19_model = get_model()
     bottleneck_feature = extract_InceptionV3(path_to_tensor(img_path))
     # obtain predicted vector
