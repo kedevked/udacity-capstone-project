@@ -14,10 +14,11 @@ from keras import backend as K
 face_cascade = cv2.CascadeClassifier('face_detector/haarcascade_frontalface_alt.xml')
 
 def path_to_tensor(img_path):
-    #try:
-    # loads RGB image as PIL.Image.Image type
-    # img = Image.open(img_path)
-    #img = img.resize((224,224))
+    '''
+        args:
+            img_path: string path of the image
+        returns: a 4d tensor of the image
+    '''
     img = image.load_img(img_path, target_size=(224, 224))
     # convert PIL.Image.Image type to 3D tensor with shape (224, 224, 3)
     x = image.img_to_array(img)
@@ -28,17 +29,31 @@ def path_to_tensor(img_path):
     #    pass
 
 def paths_to_tensor(img_paths):
+    '''
+        args:
+            img_paths: array of tensor
+        returns: a concatenation of the tensors
+    '''
     list_of_tensors = [path_to_tensor(img_path) for img_path in tqdm(img_paths)]
     return np.vstack(list_of_tensors)
 
 def face_detector(img_path):
-    
+    '''
+        args:
+            img_path: string path of the image
+        returns: boolean indicating if image contains human or not
+    '''
     img = cv2.imread(img_path)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray)
     return len(faces) > 0
 
 def ResNet50_predict_labels(img_path):
+    '''
+        args:
+            img_path: string path of the image
+        returns: index of the label of the image
+    '''
     # returns prediction vector for image located at img_path
     ResNet50_model = ResNet50(weights='imagenet')
     img = preprocess_input(path_to_tensor(img_path))
@@ -46,15 +61,13 @@ def ResNet50_predict_labels(img_path):
     return np.argmax(ResNet50_model.predict(img))
 
 def dog_detector(img_path):
+    '''
+        args:
+            img_path: string path of the image
+        returns: boolean indicating if image contains dog or not
+    '''
     prediction = ResNet50_predict_labels(img_path)
     return ((prediction <= 268) & (prediction >= 151))
-
-# def extract_features() :
-    
-#     train_VGG19 = bottleneck_features['train']
-#     valid_VGG19 = bottleneck_features['valid']
-#     test_VGG19 = bottleneck_features['test']
-#     return train_VGG19, valid_VGG19, test_VGG19
 
 def predict_breed(img_path):
     '''
@@ -75,8 +88,12 @@ def predict_breed(img_path):
         raise ValueError('The file selected does not contain either a human or dog picture')
 
 def VGG19_predict_breed(img_path):
-    # extract bottleneck features
-    # K.clear_session()
+    '''
+        args:
+            img_path: string path of the image
+        returns
+            name: string name of the predicted breed
+    '''
     VGG19_model = get_model()
     bottleneck_feature = extract_InceptionV3(path_to_tensor(img_path))
     # obtain predicted vector
@@ -85,14 +102,18 @@ def VGG19_predict_breed(img_path):
     with open ('dog_names', 'rb') as fp:
         dog_names = pickle.load(fp)
     print('dog name', dog_names[np.argmax(predicted_vector)])
-    return dog_names[np.argmax(predicted_vector)]
+    name = dog_names[np.argmax(predicted_vector)]
+    return name
 
 def get_model():
-    VGG19_model = Sequential()
-    VGG19_model.add(GlobalAveragePooling2D(input_shape=(5, 5, 2048)))
+    '''
+        returns a keras model
+    '''
+    model = Sequential()
+    model.add(GlobalAveragePooling2D(input_shape=(5, 5, 2048)))
 
-    VGG19_model.add(Dense(133, activation='softmax'))
-    VGG19_model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+    model.add(Dense(133, activation='softmax'))
+    model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
 
-    VGG19_model.load_weights('saved_models/weights.best.VGG19.hdf5')
-    return VGG19_model
+    model.load_weights('saved_models/weights.best.VGG19.hdf5')
+    return model
