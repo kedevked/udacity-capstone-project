@@ -58,3 +58,7 @@ Launch frontend
 	- npm start
 
 The project will be accessible on the url: http://localhost:4200
+
+## jupyter notebook
+
+The jupyter notebook .ipynb and its corresponding .html file that was used for the webapp can be found in the root of the repository.
